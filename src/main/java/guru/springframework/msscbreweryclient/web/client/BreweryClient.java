@@ -1,6 +1,7 @@
 package guru.springframework.msscbreweryclient.web.client;
 
 import guru.springframework.msscbreweryclient.web.model.BeerDto;
+import guru.springframework.msscbreweryclient.web.model.CustomerDto;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -16,6 +17,7 @@ import java.util.UUID;
 public class BreweryClient {
 
     public final String BEER_PATH_V1 = "/api/v1/beer/";
+    public final String CUSTOMER_PATH_V1 = "/api/v1/customer/";
 
     private String apiHost;
 
@@ -35,10 +37,26 @@ public class BreweryClient {
     }
 
     public void updateBeer(UUID id, BeerDto beerDto){
-        restTemplate.put(this.apiHost + BEER_PATH_V1 + "/" + id.toString(), beerDto);
+        restTemplate.put(this.apiHost + BEER_PATH_V1 + id.toString(), beerDto);
     }
 
     public void deleteBeer(UUID id){
-        restTemplate.delete(this.apiHost + BEER_PATH_V1 + "/" + id.toString());
+        restTemplate.delete(this.apiHost + BEER_PATH_V1 + id.toString());
+    }
+
+    public CustomerDto getCustomerById(UUID id){
+        return this.restTemplate.getForObject(apiHost + CUSTOMER_PATH_V1 + id.toString(), CustomerDto.class);
+    }
+
+    public URI saveNewCustomer(CustomerDto customerDto){
+        return restTemplate.postForLocation(this.apiHost + CUSTOMER_PATH_V1, customerDto);
+    }
+
+    public void updateCustomer(UUID id, CustomerDto customerDto){
+        restTemplate.put(this.apiHost + CUSTOMER_PATH_V1  + id.toString(), customerDto);
+    }
+
+    public void deleteCustomer(UUID id){
+        restTemplate.delete(this.apiHost + CUSTOMER_PATH_V1 + id.toString());
     }
 }
