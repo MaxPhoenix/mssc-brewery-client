@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.net.URI;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class BreweryClientTest {
@@ -20,53 +20,70 @@ class BreweryClientTest {
     @Test
     void getBeerById() {
         BeerDto dto = client.getBeerById(UUID.randomUUID());
+
         assertNotNull(dto);
+
     }
 
     @Test
-    void saveNewBeerTest() {
-        BeerDto beerDto = BeerDto.builder().build();
+    void testSaveNewBeer() {
+        //given
+        BeerDto beerDto = BeerDto.builder().beerName("New Beer").build();
 
         URI uri = client.saveNewBeer(beerDto);
 
         assertNotNull(uri);
 
-        System.out.println(uri);
+        System.out.println(uri.toString());
+
     }
 
     @Test
-    void updateBeerTest() {
-        BeerDto beerDto = BeerDto.builder().build();
+    void testUpdateBeer() {
+        //given
+        BeerDto beerDto = BeerDto.builder().beerName("New Beer").build();
 
         client.updateBeer(UUID.randomUUID(), beerDto);
+
     }
 
     @Test
-    void deleteBeerTest() {
+    void testDeleteBeer() {
         client.deleteBeer(UUID.randomUUID());
     }
 
     @Test
     void getCustomerById() {
-        assertNotNull(client.getCustomerById(UUID.randomUUID()));
+        CustomerDto dto = client.getCustomerById(UUID.randomUUID());
+
+        assertNotNull(dto);
+
     }
 
     @Test
-    void saveNewCustomer() {
-        URI uri = client.saveNewCustomer(CustomerDto.builder().build());
+    void testSaveNewCustomer() {
+        //given
+        CustomerDto customerDto = CustomerDto.builder().name("Joe").build();
+
+        URI uri = client.saveNewCustomer(customerDto);
 
         assertNotNull(uri);
 
-        System.out.println(uri);
+        System.out.println(uri.toString());
+
     }
 
     @Test
-    void updateCustomer() {
-        client.updateCustomer(UUID.randomUUID(), CustomerDto.builder().build());
+    void testUpdateCustomer() {
+        //given
+        CustomerDto customerDto = CustomerDto.builder().name("Jim").build();
+
+        client.updateCustomer(UUID.randomUUID(), customerDto);
+
     }
 
     @Test
-    void deleteCustomer() {
+    void testDeleteCustomer() {
         client.deleteCustomer(UUID.randomUUID());
     }
 }

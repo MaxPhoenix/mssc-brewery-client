@@ -11,52 +11,56 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.UUID;
 
-@Data
+/**
+ * Created by jt on 2019-04-23.
+ */
+@ConfigurationProperties(prefix = "sfg.brewery", ignoreUnknownFields = false)
 @Component
-@ConfigurationProperties(value = "sfg.brewery", ignoreUnknownFields = false)
 public class BreweryClient {
 
     public final String BEER_PATH_V1 = "/api/v1/beer/";
     public final String CUSTOMER_PATH_V1 = "/api/v1/customer/";
-
-    private String apiHost;
+    private String apihost;
 
     private final RestTemplate restTemplate;
-
 
     public BreweryClient(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public BeerDto getBeerById(UUID id){
-        return this.restTemplate.getForObject(apiHost + BEER_PATH_V1 + id.toString(), BeerDto.class);
+    public BeerDto getBeerById(UUID uuid){
+        return restTemplate.getForObject(apihost + BEER_PATH_V1 + uuid.toString(), BeerDto.class);
     }
 
     public URI saveNewBeer(BeerDto beerDto){
-        return restTemplate.postForLocation(this.apiHost + BEER_PATH_V1, beerDto);
+        return restTemplate.postForLocation(apihost + BEER_PATH_V1, beerDto);
     }
 
-    public void updateBeer(UUID id, BeerDto beerDto){
-        restTemplate.put(this.apiHost + BEER_PATH_V1 + id.toString(), beerDto);
+    public void updateBeer(UUID uuid, BeerDto beerDto){
+        restTemplate.put(apihost + BEER_PATH_V1  + uuid, beerDto);
     }
 
-    public void deleteBeer(UUID id){
-        restTemplate.delete(this.apiHost + BEER_PATH_V1 + id.toString());
+    public void deleteBeer(UUID uuid){
+        restTemplate.delete(apihost + BEER_PATH_V1 + uuid );
     }
 
-    public CustomerDto getCustomerById(UUID id){
-        return this.restTemplate.getForObject(apiHost + CUSTOMER_PATH_V1 + id.toString(), CustomerDto.class);
+    public void setApihost(String apihost) {
+        this.apihost = apihost;
     }
 
-    public URI saveNewCustomer(CustomerDto customerDto){
-        return restTemplate.postForLocation(this.apiHost + CUSTOMER_PATH_V1, customerDto);
+    public CustomerDto getCustomerById(UUID customerId) {
+        return restTemplate.getForObject(apihost+ CUSTOMER_PATH_V1 + customerId.toString(), CustomerDto.class);
     }
 
-    public void updateCustomer(UUID id, CustomerDto customerDto){
-        restTemplate.put(this.apiHost + CUSTOMER_PATH_V1  + id.toString(), customerDto);
+    public URI saveNewCustomer(CustomerDto customerDto) {
+        return  restTemplate.postForLocation(apihost + CUSTOMER_PATH_V1, customerDto);
     }
 
-    public void deleteCustomer(UUID id){
-        restTemplate.delete(this.apiHost + CUSTOMER_PATH_V1 + id.toString());
+    public void updateCustomer(UUID customerId, CustomerDto customerDto) {
+        restTemplate.put(apihost + CUSTOMER_PATH_V1 + customerId, customerDto);
+    }
+
+    public void deleteCustomer(UUID customerId) {
+        restTemplate.delete(apihost + CUSTOMER_PATH_V1 + customerId);
     }
 }
